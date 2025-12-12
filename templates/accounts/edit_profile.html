@@ -1,0 +1,146 @@
+<!-- templates/accounts/edit_profile.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if current_language == 'sw' %}Hariri Wasifu{% else %}Edit Profile{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-edit me-2"></i>
+                        {% if current_language == 'sw' %}Hariri Wasifu Wako{% else %}Edit Your Profile{% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <h5 class="mb-3">
+                            <i class="fas fa-user me-2"></i>
+                            {% if current_language == 'sw' %}Taarifa Binafsi{% else %}Personal Information{% endif %}
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">
+                                    {% if current_language == 'sw' %}Jina la Kwanza{% else %}First Name{% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="first_name" 
+                                       name="first_name" value="{{ user.first_name }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">
+                                    {% if current_language == 'sw' %}Jina la Mwisho{% else %}Last Name{% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="last_name" 
+                                       name="last_name" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="username" class="form-label">
+                                    {% if current_language == 'sw' %}Jina la Mtumiaji{% else %}Username{% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="username" 
+                                       value="{{ user.username }}" readonly>
+                                <small class="text-muted">
+                                    {% if current_language == 'sw' %}
+                                        Jina la mtumiaji haliwezi kubadilishwa.
+                                    {% else %}
+                                        Username cannot be changed.
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">
+                                    {% if current_language == 'sw' %}Barua Pepe{% else %}Email{% endif %} *
+                                </label>
+                                <input type="email" class="form-control" id="email" 
+                                       name="email" value="{{ user.email }}" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">
+                                {% if current_language == 'sw' %}Picha ya Profaili{% else %}Profile Picture{% endif %}
+                            </label>
+                            <input type="file" class="form-control" id="profile_picture" 
+                                   name="profile_picture" accept="image/*">
+                            {% if profile.profile_picture %}
+                            <div class="mt-2">
+                                <small class="text-muted">
+                                    {% if current_language == 'sw' %}
+                                        Picha ya sasa:
+                                    {% else %}
+                                        Current picture:
+                                    {% endif %}
+                                </small>
+                                <img src="{{ profile.profile_picture.url }}" 
+                                     alt="Current profile" 
+                                     class="img-thumbnail mt-1" 
+                                     style="width: 100px;">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <h5 class="mb-3 mt-4">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            {% if current_language == 'sw' %}Taarifa ya Mawasiliano{% else %}Contact Information{% endif %}
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone_number" class="form-label">
+                                    {% if current_language == 'sw' %}Nambari ya Simu{% else %}Phone Number{% endif %}
+                                </label>
+                                <input type="tel" class="form-control" id="phone_number" 
+                                       name="phone_number" value="{{ profile.phone_number }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">
+                                    {% if current_language == 'sw' %}Mji{% else %}City{% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="city" 
+                                       name="city" value="{{ profile.city }}">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="region" class="form-label">
+                                {% if current_language == 'sw' %}Mkoa{% else %}Region{% endif %}
+                            </label>
+                            <input type="text" class="form-control" id="region" 
+                                   name="region" value="{{ profile.region }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">
+                                {% if current_language == 'sw' %}Anwani Kamili{% else %}Complete Address{% endif %}
+                            </label>
+                            <textarea class="form-control" id="address" name="address" 
+                                      rows="3">{{ profile.address }}</textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'profile' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                {% if current_language == 'sw' %}Rudi{% else %}Back{% endif %}
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>
+                                {% if current_language == 'sw' %}Hifadhi Mabadiliko{% else %}Save Changes{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

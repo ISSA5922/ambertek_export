@@ -1,0 +1,237 @@
+<!-- templates/accounts/register.html -->
+{% extends 'base.html' %}
+
+{% block title %}{% if current_language == 'sw' %}Jisajili{% else %}Register{% endif %} - Ambertek Export{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <!-- Header -->
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="text-center">
+                        <i class="fas fa-user-plus fa-3x mb-3"></i>
+                        <h2 class="mb-0">
+                            {% if current_language == 'sw' %}
+                                Jisajili Akaunti Mpya
+                            {% else %}
+                                Create New Account
+                            {% endif %}
+                        </h2>
+                    </div>
+                </div>
+                
+                <!-- Body -->
+                <div class="card-body p-4 p-md-5">
+                    {% if messages %}
+                    <div class="messages mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            <i class="fas fa-info-circle me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="POST" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Personal Information -->
+                        <h5 class="mb-3 text-primary">
+                            <i class="fas fa-user me-2"></i>
+                            {% if current_language == 'sw' %}
+                                Taarifa Binafsi
+                            {% else %}
+                                Personal Information
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="first_name" class="form-label">
+                                    {% if current_language == 'sw' %}
+                                        Jina la Kwanza
+                                    {% else %}
+                                        First Name
+                                    {% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="first_name" name="first_name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="last_name" class="form-label">
+                                    {% if current_language == 'sw' %}
+                                        Jina la Mwisho
+                                    {% else %}
+                                        Last Name
+                                    {% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="last_name" name="last_name">
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Information -->
+                        <h5 class="mb-3 text-primary mt-4">
+                            <i class="fas fa-address-card me-2"></i>
+                            {% if current_language == 'sw' %}
+                                Maelezo ya Mawasiliano
+                            {% else %}
+                                Contact Information
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">
+                                {% if current_language == 'sw' %}
+                                    Nambari ya Simu
+                                {% else %}
+                                    Phone Number
+                                {% endif %}
+                            </label>
+                            <input type="tel" class="form-control" id="phone_number" name="phone_number">
+                        </div>
+                        
+                        <!-- Account Information -->
+                        <h5 class="mb-3 text-primary mt-4">
+                            <i class="fas fa-lock me-2"></i>
+                            {% if current_language == 'sw' %}
+                                Maelezo ya Akaunti
+                            {% else %}
+                                Account Information
+                            {% endif %}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="username" class="form-label">
+                                {% if current_language == 'sw' %}
+                                    Jina la Mtumiaji *
+                                {% else %}
+                                    Username *
+                                {% endif %}
+                            </label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="form-text">
+                                {% if current_language == 'sw' %}
+                                    Jina utakalotumia kuingia.
+                                {% else %}
+                                    Name you'll use to login.
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                {% if current_language == 'sw' %}
+                                    Barua Pepe *
+                                {% else %}
+                                    Email Address *
+                                {% endif %}
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="password1" class="form-label">
+                                    {% if current_language == 'sw' %}
+                                        Nywila *
+                                    {% else %}
+                                        Password *
+                                    {% endif %}
+                                </label>
+                                <input type="password" class="form-control" id="password1" name="password1" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="password2" class="form-label">
+                                    {% if current_language == 'sw' %}
+                                        Thibitisha Nywila *
+                                    {% else %}
+                                        Confirm Password *
+                                    {% endif %}
+                                </label>
+                                <input type="password" class="form-control" id="password2" name="password2" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Terms and Conditions -->
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="agree_terms" name="agree_terms" required>
+                                <label class="form-check-label" for="agree_terms">
+                                    {% if current_language == 'sw' %}
+                                        Nakubali <a href="#" class="text-decoration-none">Masharti na Mashariti</a> *
+                                    {% else %}
+                                        I agree to the <a href="#" class="text-decoration-none">Terms and Conditions</a> *
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg py-3">
+                                <i class="fas fa-user-plus me-2"></i>
+                                {% if current_language == 'sw' %}
+                                    Jisajili Sasa
+                                {% else %}
+                                    Register Now
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Login Link -->
+                    <div class="text-center">
+                        <p class="mb-3">
+                            {% if current_language == 'sw' %}
+                                Tayari una akaunti?
+                            {% else %}
+                                Already have an account?
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg w-100 py-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            {% if current_language == 'sw' %}
+                                Ingia Hapa
+                            {% else %}
+                                Login Here
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center py-3">
+                    <p class="mb-0 text-muted">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        {% if current_language == 'sw' %}
+                            Taarifa zako ni salama 100%
+                        {% else %}
+                            Your information is 100% secure
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+        border: none;
+    }
+    .btn-outline-primary:hover {
+        background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+        color: white;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if current_language == 'sw' %}Oda Imewekwa - Ambertek Export{% else %}Order Placed - Ambertek Export{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow text-center">
+                <div class="card-body py-5">
+                    <!-- Success Icon -->
+                    <div class="mb-4">
+                        <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-4">
+                            <i class="fas fa-check-circle fa-4x text-success"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <h2 class="text-success mb-3">
+                        {% if current_language == 'sw' %}Hongera! Oda Imewekwa{% else %}Congratulations! Order Placed{% endif %}
+                    </h2>
+                    
+                    <p class="lead mb-4">
+                        {% if current_language == 'sw' %}
+                            Oda yako imepokelewa kikamilifu. Tutaungana nawe hivi punde.
+                        {% else %}
+                            Your order has been received successfully. We'll contact you shortly.
+                        {% endif %}
+                    </p>
+                    
+                    <!-- Order Details -->
+                    <div class="card border-primary mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-receipt me-2"></i>
+                                {% if current_language == 'sw' %}Maelezo ya Oda{% else %}Order Details{% endif %}
+                            </h5>
+                        </div>
+                        <div class="card-body text-start">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-muted">
+                                        {% if current_language == 'sw' %}Nambari ya Oda{% else %}Order Number{% endif %}
+                                    </h6>
+                                    <h4 class="text-primary">{{ order.order_number }}</h4>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-muted">
+                                        {% if current_language == 'sw' %}Tarehe ya Oda{% else %}Order Date{% endif %}
+                                    </h6>
+                                    <p class="mb-0">{{ order.created_at|date:"d M Y, H:i" }}</p>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-muted">
+                                        {% if current_language == 'sw' %}Mteja{% else %}Customer{% endif %}
+                                    </h6>
+                                    <p class="mb-1"><strong>{{ order.customer_name }}</strong></p>
+                                    <p class="mb-1 small">{{ order.customer_phone }}</p>
+                                    {% if order.customer_email %}
+                                    <p class="mb-0 small">{{ order.customer_email }}</p>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-muted">
+                                        {% if current_language == 'sw' %}Jumla ya Oda{% else %}Order Total{% endif %}
+                                    </h6>
+                                    <h3 class="text-primary">TZS {{ order.total_amount|floatformat:0 }}</h3>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6 class="text-muted">
+                                    {% if current_language == 'sw' %}Anuani ya Uwasilishaji{% else %}Delivery Address{% endif %}
+                                </h6>
+                                <p class="mb-0">{{ order.customer_address|linebreaks }}</p>
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <i class="fas fa-comment-alt me-2"></i>
+                                {% if current_language == 'sw' %}
+                                    <strong>Tumeuma taarifa hizi kwa nambari yako ya simu kupitia SMS na WhatsApp.</strong>
+                                    <br>
+                                    Tutaungana nawe ndani ya masaa 24 kuhusu usafirishaji.
+                                {% else %}
+                                    <strong>We've sent these details to your phone number via SMS and WhatsApp.</strong>
+                                    <br>
+                                    We'll contact you within 24 hours regarding delivery.
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                        <a href="{% url 'products' %}" class="btn btn-outline-primary btn-lg px-4">
+                            <i class="fas fa-shopping-bag me-2"></i>
+                            {% if current_language == 'sw' %}Endelea Nunua{% else %}Continue Shopping{% endif %}
+                        </a>
+                        <a href="https://wa.me/255123456789?text=Habari! Nina oda #{{ order.order_number }}" 
+                           class="btn btn-success btn-lg px-4" target="_blank">
+                            <i class="fab fa-whatsapp me-2"></i>
+                            {% if current_language == 'sw' %}Tupelekeje kwenye WhatsApp{% else %}Chat on WhatsApp{% endif %}
+                        </a>
+                    </div>
+                    
+                    <!-- Help Info -->
+                    <div class="mt-5">
+                        <h6 class="text-muted mb-3">
+                            <i class="fas fa-headset me-2"></i>
+                            {% if current_language == 'sw' %}Hitaji Usaidizi?{% else %}Need Help?{% endif %}
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body">
+                                        <i class="fas fa-phone text-primary mb-2"></i>
+                                        <h6>{% if current_language == 'sw' %}Piga Simu{% else %}Call Us{% endif %}</h6>
+                                        <p class="mb-0 small">+255 123 456 789</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card border-0 bg-light">
+                                    <div class="card-body">
+                                        <i class="fas fa-envelope text-primary mb-2"></i>
+                                        <h6>{% if current_language == 'sw' %}Barua Pepe{% else %}Email{% endif %}</h6>
+                                        <p class="mb-0 small">orders@ambertek.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

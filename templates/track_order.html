@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if current_language == 'sw' %}Fuatilia Oda - Ambertek Export{% else %}Track Order - Ambertek Export{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-truck me-2"></i>
+                        {% if current_language == 'sw' %}Fuatilia Oda Yako{% else %}Track Your Order{% endif %}
+                    </h1>
+                </div>
+                <div class="card-body p-5">
+                    <div class="text-center mb-5">
+                        <i class="fas fa-search fa-4x text-primary mb-4"></i>
+                        <p class="lead">
+                            {% if current_language == 'sw' %}
+                                Ingiza namba ya oda yako ili kufuatilia hali yake
+                            {% else %}
+                                Enter your order number to track its status
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <form action="#" method="post">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="order_id" class="form-label">
+                                    <strong>
+                                        {% if current_language == 'sw' %}Namba ya Oda *{% else %}Order Number *{% endif %}
+                                    </strong>
+                                </label>
+                                <input type="text" class="form-control form-control-lg" id="order_id" name="order_id" 
+                                       placeholder="{% if current_language == 'sw' %}Mfano: 1001{% else %}e.g., 1001{% endif %}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">
+                                    <strong>
+                                        {% if current_language == 'sw' %}Barua Pepe *{% else %}Email Address *{% endif %}
+                                    </strong>
+                                </label>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email" 
+                                       placeholder="{% if current_language == 'sw' %}barua@pepe.com{% else %}email@example.com{% endif %}" required>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg py-3">
+                                <i class="fas fa-search me-2"></i>
+                                {% if current_language == 'sw' %}Fuatilia Oda{% else %}Track Order{% endif %}
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Help Section -->
+                    <div class="mt-5 pt-4 border-top">
+                        <h5 class="text-center mb-4">
+                            <i class="fas fa-question-circle me-2"></i>
+                            {% if current_language == 'sw' %}Unahitaji Msaada?{% else %}Need Help?{% endif %}
+                        </h5>
+                        <div class="row text-center">
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-receipt fa-2x text-primary mb-2"></i>
+                                <h6>
+                                    {% if current_language == 'sw' %}Pata Namba ya Oda{% else %}Get Order Number{% endif %}
+                                </h6>
+                                <p class="small text-muted">
+                                    {% if current_language == 'sw' %}
+                                        Angalia barua pepe ya uthibitishaji
+                                    {% else %}
+                                        Check your confirmation email
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-envelope fa-2x text-primary mb-2"></i>
+                                <h6>
+                                    {% if current_language == 'sw' %}Hakiki Barua Pepe{% else %}Verify Email{% endif %}
+                                </h6>
+                                <p class="small text-muted">
+                                    {% if current_language == 'sw' %}
+                                        Tumia barua pepe uliyotumia kufanya oda
+                                    {% else %}
+                                        Use the email used for ordering
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <i class="fas fa-headset fa-2x text-primary mb-2"></i>
+                                <h6>
+                                    {% if current_language == 'sw' %}Wasiliana Nasi{% else %}Contact Support{% endif %}
+                                </h6>
+                                <p class="small text-muted">
+                                    {% if current_language == 'sw' %}
+                                        Tupigie simu kwa msaada wa ziada
+                                    {% else %}
+                                        Call us for additional support
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body text-center py-4">
+                    <h5 class="mb-3">
+                        <i class="fas fa-phone-alt me-2"></i>
+                        {% if current_language == 'sw' %}Msaada wa Haraka{% else %}Quick Support{% endif %}
+                    </h5>
+                    <p class="text-muted mb-4">
+                        {% if current_language == 'sw' %}
+                            Timu yetu iko tayari kukusaidia na maswali yoyote kuhusu oda zako
+                        {% else %}
+                            Our team is ready to help you with any questions about your orders
+                        {% endif %}
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="https://wa.me/971561498516" class="btn btn-success" target="_blank">
+                            <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                        </a>
+                        <a href="tel:+971561498516" class="btn btn-outline-primary">
+                            <i class="fas fa-phone me-2"></i>
+                            {% if current_language == 'sw' %}Piga Simu{% else %}Call Us{% endif %}
+                        </a>
+                        <a href="{% url 'contact' %}" class="btn btn-primary">
+                            <i class="fas fa-envelope me-2"></i>
+                            {% if current_language == 'sw' %}Tuma Ujumbe{% else %}Send Message{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

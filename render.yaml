@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: ambertek-export
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn ambertek_export.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ambertekdb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+    healthCheckPath: /
+    autoDeploy: true
+
+databases:
+  - name: ambertekdb
+    plan: free

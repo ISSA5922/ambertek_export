@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - Ambertek Export{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">
+                {% if current_language == 'sw' %}Nyumbani{% else %}Home{% endif %}
+            </a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products' %}" class="text-decoration-none">
+                {% if current_language == 'sw' %}Bidhaa{% else %}Products{% endif %}
+            </a></li>
+            <li class="breadcrumb-item active text-primary">{{ product.name|truncatewords:3 }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Product Images -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body p-3">
+                    <img src="{{ product.image.url }}" 
+                         class="img-fluid rounded-3 w-100" 
+                         alt="{{ product.name }}"
+                         id="mainProductImage"
+                         style="max-height: 500px; object-fit: contain; background: #f8f9fa;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <!-- Product Header -->
+                    <div class="mb-3">
+                        <span class="badge bg-primary mb-2">{{ product.category.name }}</span>
+                        <h1 class="h2 fw-bold text-dark mb-2">{{ product.name }}</h1>
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="h2 text-primary fw-bold mb-0">TZS {{ product.price }}</span>
+                            <span class="badge {% if product.available %}bg-success{% else %}bg-danger{% endif %} ms-3 fs-6">
+                                {% if product.available %}
+                                    <i class="fas fa-check me-1"></i>
+                                    {% if current_language == 'sw' %}Ipo Stock{% else %}In Stock{% endif %}
+                                {% else %}
+                                    <i class="fas fa-times me-1"></i>
+                                    {% if current_language == 'sw' %}Haipo{% else %}Out of Stock{% endif %}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Product Description -->
+                    <div class="mb-4">
+                        <h5 class="text-dark mb-3">
+                            {% if current_language == 'sw' %}Maelezo{% else %}Description{% endif %}
+                        </h5>
+                        <p class="text-muted lead" style="line-height: 1.6;">{{ product.description }}</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mb-4">
+                        {% if product.available %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <a href="{% url 'add_to_cart' product.id %}" 
+                                   class="btn btn-primary btn-lg w-100 py-3 fw-bold">
+                                    <i class="fas fa-cart-plus me-2"></i>
+                                    {% if current_language == 'sw' %}Weka kwenye Carti{% else %}Add to Cart{% endif %}
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="https://wa.me/971561498516?text={% if current_language == 'sw' %}Habari!%20Ningependa%20kununua%20{{ product.name|urlencode }}%20-%20TZS%20{{ product.price }}%20.%20Product%20URL:%20{{ request.build_absolute_uri|urlencode }}{% else %}Hello!%20I%20would%20like%20to%20buy%20{{ product.name|urlencode }}%20-%20TZS%20{{ product.price }}%20.%20Product%20URL:%20{{ request.build_absolute_uri|urlencode }}{% endif %}" 
+                                   class="btn btn-success btn-lg w-100 py-3 fw-bold"
+                                   target="_blank">
+                                    <i class="fab fa-whatsapp me-2"></i>
+                                    {% if current_language == 'sw' %}Nunua kupitia WhatsApp{% else %}Buy on WhatsApp{% endif %}
+                                </a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning mb-0">
+                            <i class="fas fa-clock me-2"></i>
+                            {% if current_language == 'sw' %}
+                                Bidhaa hii kwa sasa haipo. Wasiliana nasi kwa habari za usajili.
+                            {% else %}
+                                This product is currently out of stock. Contact us for availability updates.
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Shipping Information -->
+                    <div class="border-top pt-4">
+                        <h6 class="text-dark mb-3">
+                            <i class="fas fa-shipping-fast text-primary me-2"></i>
+                            {% if current_language == 'sw' %}Maelezo ya Usafirishaji{% else %}Shipping Information{% endif %}
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="text-center p-3 border rounded-3 bg-light">
+                                    <i class="fas fa-truck text-primary fa-lg mb-2"></i>
+                                    <h6 class="mb-1">
+                                        {% if current_language == 'sw' %}Usafirishaji Bure{% else %}Free Shipping{% endif %}
+                                    </h6>
+                                    <small class="text-muted">
+                                        {% if current_language == 'sw' %}Dar es Salaam{% else %}Dar es Salaam{% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center p-3 border rounded-3 bg-light">
+                                    <i class="fas fa-calendar-alt text-primary fa-lg mb-2"></i>
+                                    <h6 class="mb-1">
+                                        {% if current_language == 'sw' %}Siku 7-14{% else %}7-14 Days{% endif %}
+                                    </h6>
+                                    <small class="text-muted">
+                                        {% if current_language == 'sw' %}Muda wa Kufika{% else %}Delivery Time{% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+<!-- Add to cart form -->
+<form method="POST" action="{% url 'add_to_cart' product.id %}">
+    {% csrf_token %}
+    <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 100px;">
+    
+    {% if user.is_authenticated %}
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-cart-plus"></i>
+            {% if current_language == 'sw' %}
+                Ongeza kwenye Gari
+            {% else %}
+                Add to Cart
+            {% endif %}
+        </button>
+    {% else %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginRequiredModal">
+            <i class="fas fa-cart-plus"></i>
+            {% if current_language == 'sw' %}
+                Ongeza kwenye Gari
+            {% else %}
+                Add to Cart
+            {% endif %}
+        </button>
+    {% endif %}
+</form>
+
+<!-- Login Required Modal -->
+<div class="modal fade" id="loginRequiredModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-sign-in-alt"></i>
+                    {% if current_language == 'sw' %}
+                        Ingia Inahitajika
+                    {% else %}
+                        Login Required
+                    {% endif %}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    {% if current_language == 'sw' %}
+                        Unahitaji kuingia au kujisajili ili kuongeza bidhaa kwenye gari la ununuzi.
+                    {% else %}
+                        You need to login or register to add products to your shopping cart.
+                    {% endif %}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    {% if current_language == 'sw' %}
+                        Ingia
+                    {% else %}
+                        Login
+                    {% endif %}
+                </a>
+                <a href="{% url 'register' %}?next={{ request.path }}" class="btn btn-outline-primary">
+                    <i class="fas fa-user-plus"></i>
+                    {% if current_language == 'sw' %}
+                        Jisajili
+                    {% else %}
+                        Register
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% if user.is_authenticated %}
+    <!-- Show add to cart form -->
+    <form method="POST" action="{% url 'add_to_cart' product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-cart-plus"></i> Add to Cart
+        </button>
+    </form>
+{% else %}
+    <!-- Show login prompt -->
+    <div class="alert alert-warning">
+        <p>You must login to add items to cart</p>
+        <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">
+            Login Now
+        </a>
+    </div>
+{% endif %}
+
+            <!-- Quick Support Card -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-body text-center p-4">
+                    <h5 class="text-dark mb-3">
+                        {% if current_language == 'sw' %}Unahitaji Msaada?{% else %}Need Help with This Product?{% endif %}
+                    </h5>
+                    <p class="text-muted mb-4">
+                        {% if current_language == 'sw' %}
+                            Timu yetu iko tayari kukujibu maswali na kukusaidia na ununuzi wako.
+                        {% else %}
+                            Our team is here to answer your questions and assist with your purchase.
+                        {% endif %}
+                    </p>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="tel:+971561498516" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-phone me-2"></i>
+                                {% if current_language == 'sw' %}Tupee Simu{% else %}Call Us{% endif %}
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="https://wa.me/971561498516" class="btn btn-success w-100" target="_blank">
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

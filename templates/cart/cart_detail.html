@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if current_language == 'sw' %}Carti - Ambertek Export{% else %}Cart - Ambertek Export{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">
+                {% if current_language == 'sw' %}Nyumbani{% else %}Home{% endif %}
+            </a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products' %}" class="text-decoration-none">
+                {% if current_language == 'sw' %}Bidhaa{% else %}Products{% endif %}
+            </a></li>
+            <li class="breadcrumb-item active text-primary">
+                {% if current_language == 'sw' %}Carti{% else %}Shopping Cart{% endif %}
+            </li>
+        </ol>
+    </nav>
+
+    {% if cart_items %}
+    <div class="row">
+        <!-- Cart Items -->
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h4 class="mb-0">
+                        <i class="fas fa-shopping-cart me-2 text-primary"></i>
+                        {% if current_language == 'sw' %}Bidhaa Zako{% else %}Your Items{% endif %}
+                        <span class="badge bg-primary rounded-pill ms-2">{{ items_count }}</span>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% for item in cart_items %}
+                    <div class="row align-items-center mb-4 pb-3 border-bottom">
+                        <div class="col-md-2">
+                            {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" 
+                                 alt="{{ item.product.name }}"
+                                 class="img-fluid rounded" 
+                                 style="height: 80px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                 style="height: 80px; width: 80px;">
+                                <i class="fas fa-image text-muted"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-5">
+                            <h6 class="mb-1">{{ item.product.name }}</h6>
+                            <p class="text-muted small mb-0">
+                                {{ item.product.description|truncatewords:10 }}
+                            </p>
+                        </div>
+                        <div class="col-md-2">
+                            <h6 class="mb-0">TZS {{ item.product.price }}</h6>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="input-group input-group-sm">
+                                <form method="POST" action="{% url 'update_cart' item.product.id %}" class="d-flex">
+                                    {% csrf_token %}
+                                    <input type="number" 
+                                           name="quantity" 
+                                           value="{{ item.quantity }}" 
+                                           min="1" 
+                                           max="10"
+                                           class="form-control form-control-sm" 
+                                           style="width: 70px;">
+                                    <button type="submit" class="btn btn-outline-primary btn-sm ms-2">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="{% url 'remove_from_cart' item.product.id %}" 
+                               class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'products' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            {% if current_language == 'sw' %}Endelea Nunua{% else %}Continue Shopping{% endif %}
+                        </a>
+                        <a href="{% url 'clear_cart' %}" class="btn btn-outline-danger">
+                            <i class="fas fa-trash me-2"></i>
+                            {% if current_language == 'sw' %}Futa Carti{% else %}Clear Cart{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>
+                        {% if current_language == 'sw' %}Muhtasari wa Oda{% else %}Order Summary{% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{% if current_language == 'sw' %}Jumla ya Bidhaa{% else %}Items Total{% endif %}</span>
+                            <span>TZS {{ cart_total|floatformat:0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>{% if current_language == 'sw' %}Usafirishaji{% else %}Shipping{% endif %}</span>
+                            <span class="text-success">
+                                {% if current_language == 'sw' %}Bure{% else %}Free{% endif %}
+                            </span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <h5 class="mb-0">{% if current_language == 'sw' %}Jumla{% else %}Total{% endif %}</h5>
+                            <h4 class="mb-0 text-primary">TZS {{ cart_total|floatformat:0 }}</h4>
+                        </div>
+                    </div>
+                    
+                    <!-- Checkout/Place Order Button -->
+                    {% if user.is_authenticated %}
+                        <div class="d-grid mb-3">
+                            <a href="{% url 'place_order' %}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                {% if current_language == 'sw' %}Weka Oda{% else %}Place Order{% endif %}
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <p class="mb-2">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                {% if current_language == 'sw' %}
+                                    Unahitaji kuingia ili kuweka agizo.
+                                {% else %}
+                                    You need to login to place an order.
+                                {% endif %}
+                            </p>
+                            <div class="d-grid">
+                                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt me-2"></i>
+                                    {% if current_language == 'sw' %}Ingia Sasa{% else %}Login Now{% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="alert alert-info small">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {% if current_language == 'sw' %}
+                            Malipo yatafanyika wakati wa kukabidhiwa. Tutauma maelezo kupitia SMS/WhatsApp.
+                        {% else %}
+                            Payment on delivery. We'll send details via SMS/WhatsApp.
+                        {% endif %}
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="https://wa.me/255123456789" 
+                           class="btn btn-success btn-sm w-100" 
+                           target="_blank">
+                            <i class="fab fa-whatsapp me-2"></i>
+                            {% if current_language == 'sw' %}Nunua kupitia WhatsApp{% else %}Order via WhatsApp{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty Cart -->
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow text-center">
+                <div class="card-body py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-shopping-cart fa-4x text-muted"></i>
+                    </div>
+                    <h4 class="text-muted mb-3">
+                        {% if current_language == 'sw' %}Carti Yako ni Tupu{% else %}Your Cart is Empty{% endif %}
+                    </h4>
+                    <p class="text-muted mb-4">
+                        {% if current_language == 'sw' %}
+                            Hujachagua bidhaa yoyote bado. Tembelea duka letu na uchague bidhaa unazopenda.
+                        {% else %}
+                            You haven't selected any products yet. Visit our store and choose products you like.
+                        {% endif %}
+                    </p>
+                    <a href="{% url 'products' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-store me-2"></i>
+                        {% if current_language == 'sw' %}Nenda Kwenye Duka{% else %}Go to Store{% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .sticky-top {
+        position: -webkit-sticky;
+        position: sticky;
+        z-index: 1020;
+    }
+</style>
+{% endblock %}

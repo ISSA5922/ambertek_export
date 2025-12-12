@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if current_language == 'sw' %}Ingia{% else %}Login{% endif %} - Ambertek Export{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+                <!-- Header -->
+                <div class="card-header bg-primary text-white py-4">
+                    <div class="text-center">
+                        <i class="fas fa-lock fa-3x mb-3"></i>
+                        <h2 class="mb-0">
+                            {% if current_language == 'sw' %}
+                                Ingia Akaunti
+                            {% else %}
+                                Login to Your Account
+                            {% endif %}
+                        </h2>
+                    </div>
+                </div>
+                
+                <!-- Body -->
+                <div class="card-body p-4 p-md-5">
+                    {% if messages %}
+                    <div class="messages mb-4">
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            <i class="fas fa-info-circle me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <form method="POST" action="{% url 'login' %}{% if next_url %}?next={{ next_url }}{% endif %}">
+                        {% csrf_token %}
+                        
+                        <!-- Username/Email -->
+                        <div class="mb-4">
+                            <label for="username" class="form-label fw-bold">
+                                <i class="fas fa-user me-2"></i>
+                                {% if current_language == 'sw' %}
+                                    Jina la Mtumiaji au Barua Pepe
+                                {% else %}
+                                    Username or Email Address
+                                {% endif %}
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fas fa-at text-primary"></i>
+                                </span>
+                                <input type="text" 
+                                       class="form-control border-start-0" 
+                                       id="username" 
+                                       name="username" 
+                                       required
+                                       placeholder="{% if current_language == 'sw' %}ingiza jina la mtumiaji au barua pepe{% else %}enter username or email{% endif %}">
+                            </div>
+                        </div>
+                        
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-bold">
+                                <i class="fas fa-key me-2"></i>
+                                {% if current_language == 'sw' %}
+                                    Nywila
+                                {% else %}
+                                    Password
+                                {% endif %}
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="fas fa-lock text-primary"></i>
+                                </span>
+                                <input type="password" 
+                                       class="form-control border-start-0" 
+                                       id="password" 
+                                       name="password" 
+                                       required
+                                       placeholder="{% if current_language == 'sw' %}ingiza nywila yako{% else %}enter your password{% endif %}">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Remember Me & Forgot Password -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="remember_me" name="remember_me">
+                                <label class="form-check-label" for="remember_me">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    {% if current_language == 'sw' %}
+                                        Nikumbuke
+                                    {% else %}
+                                        Remember me
+                                    {% endif %}
+                                </label>
+                            </div>
+                            <a href="#" class="text-decoration-none text-primary">
+                                <i class="fas fa-question-circle me-1"></i>
+                                {% if current_language == 'sw' %}
+                                    Umesahau nywila?
+                                {% else %}
+                                    Forgot password?
+                                {% endif %}
+                            </a>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg py-3">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                {% if current_language == 'sw' %}
+                                    Ingia Sasa
+                                {% else %}
+                                    Login Now
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        {% if next_url %}
+                        <input type="hidden" name="next" value="{{ next_url }}">
+                        {% endif %}
+                    </form>
+                    
+                    <!-- Divider -->
+                    <div class="position-relative my-4">
+                        <hr>
+                        <div class="position-absolute top-50 start-50 translate-middle bg-white px-3">
+                            <span class="text-muted">
+                                {% if current_language == 'sw' %}
+                                    au
+                                {% else %}
+                                    or
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Register Link -->
+                    <div class="text-center">
+                        <p class="mb-3">
+                            {% if current_language == 'sw' %}
+                                Hauna akaunti bado?
+                            {% else %}
+                                Don't have an account yet?
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg w-100 py-3">
+                            <i class="fas fa-user-plus me-2"></i>
+                            {% if current_language == 'sw' %}
+                                Jisajili Hapa
+                            {% else %}
+                                Register Here
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="card-footer bg-light text-center py-3">
+                    <p class="mb-0 text-muted">
+                        <i class="fas fa-shield-alt me-1"></i>
+                        {% if current_language == 'sw' %}
+                            Taarifa zako ni salama 100%
+                        {% else %}
+                            Your information is 100% secure
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Benefits Card -->
+            <div class="card border-0 shadow-sm mt-4 rounded-3">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-3">
+                        <i class="fas fa-gift text-primary me-2"></i>
+                        {% if current_language == 'sw' %}
+                            Faida za Kujiandikisha
+                        {% else %}
+                            Benefits of Registering
+                        {% endif %}
+                    </h5>
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            {% if current_language == 'sw' %}
+                                Hifadhi anwani
+                            {% else %}
+                                Save addresses
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-2">
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            {% if current_language == 'sw' %}
+                                Fuata maagizo
+                            {% else %}
+                                Track orders
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-2">
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            {% if current_language == 'sw' %}
+                                Pata punguzo
+                            {% else %}
+                                Get discounts
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-2">
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                            {% if current_language == 'sw' %}
+                                Historia ya ununuzi
+                            {% else %}
+                                Purchase history
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+        border: none;
+    }
+    .btn-outline-primary:hover {
+        background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+        color: white;
+    }
+    .input-group-text {
+        transition: all 0.3s;
+    }
+    .input-group:focus-within .input-group-text {
+        background-color: #2c5aa0;
+        color: white;
+    }
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+</style>
+
+<script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const icon = this.querySelector('i');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+    
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        if (!username || !password) {
+            e.preventDefault();
+            alert('{% if current_language == "sw" %}Tafadhali jaza sehemu zote zinazohitajika{% else %}Please fill in all required fields{% endif %}');
+        }
+    });
+</script>
+{% endblock %}

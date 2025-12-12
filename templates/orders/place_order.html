@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if current_language == 'sw' %}Weka Oda - Ambertek Export{% else %}Place Order - Ambertek Export{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">
+                {% if current_language == 'sw' %}Nyumbani{% else %}Home{% endif %}
+            </a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products' %}" class="text-decoration-none">
+                {% if current_language == 'sw' %}Bidhaa{% else %}Products{% endif %}
+            </a></li>
+            <li class="breadcrumb-item active text-primary">
+                {% if current_language == 'sw' %}Weka Oda{% else %}Place Order{% endif %}
+            </li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Order Form -->
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-circle me-2"></i>
+                        {% if current_language == 'sw' %}Maelezo ya Mteja{% else %}Customer Details{% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'place_order' %}">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="customer_name" class="form-label">
+                                    {% if current_language == 'sw' %}Jina Kamili{% else %}Full Name{% endif %} *
+                                </label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="customer_phone" class="form-label">
+                                    {% if current_language == 'sw' %}Nambari ya Simu{% else %}Phone Number{% endif %} *
+                                </label>
+                                <input type="tel" class="form-control" id="customer_phone" name="customer_phone" required>
+                                <small class="text-muted">
+                                    {% if current_language == 'sw' %}
+                                        Tutauma taarifa za oda kwa nambari hii
+                                    {% else %}
+                                        We'll send order details to this number
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="customer_email" class="form-label">
+                                {% if current_language == 'sw' %}Barua Pepe{% else %}Email Address{% endif %}
+                            </label>
+                            <input type="email" class="form-control" id="customer_email" name="customer_email">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="customer_address" class="form-label">
+                                {% if current_language == 'sw' %}Anuani Kamili{% else %}Complete Address{% endif %} *
+                            </label>
+                            <textarea class="form-control" id="customer_address" name="customer_address" rows="3" required></textarea>
+                            <small class="text-muted">
+                                {% if current_language == 'sw' %}
+                                    Anwani ya kukabidhiwa bidhaa
+                                {% else %}
+                                    Delivery address for the products
+                                {% endif %}
+                            </small>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="customer_city" class="form-label">
+                                    {% if current_language == 'sw' %}Mji{% else %}City{% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="customer_city" name="customer_city">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="customer_region" class="form-label">
+                                    {% if current_language == 'sw' %}Mkoa{% else %}Region{% endif %}
+                                </label>
+                                <input type="text" class="form-control" id="customer_region" name="customer_region">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">
+                                {% if current_language == 'sw' %}Njia ya Malipo{% else %}Payment Method{% endif %} *
+                            </label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod" checked>
+                                <label class="form-check-label" for="cod">
+                                    {% if current_language == 'sw' %}Malipo Wakati wa Kukabidhiwa{% else %}Cash on Delivery{% endif %}
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="payment_method" id="mobile" value="mobile">
+                                <label class="form-check-label" for="mobile">
+                                    {% if current_language == 'sw' %}Mobile Money (M-Pesa, Tigo Pesa, Airtel Money){% else %}Mobile Money (M-Pesa, Tigo Pesa, Airtel Money){% endif %}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" id="bank" value="bank">
+                                <label class="form-check-label" for="bank">
+                                    {% if current_language == 'sw' %}Uhamisho wa Benki{% else %}Bank Transfer{% endif %}
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="notes" class="form-label">
+                                {% if current_language == 'sw' %}Maelezo ya Ziada{% else %}Additional Notes{% endif %}
+                            </label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="{% if current_language == 'sw' %}Maelezo yoyote ya ziada kuhusu oda yako...{% else %}Any additional notes about your order...{% endif %}"></textarea>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                {% if current_language == 'sw' %}
+                                    Nakubali <a href="#" class="text-primary">Sheria na Masharti</a> na <a href="#" class="text-primary">Sera ya Faragha</a>
+                                {% else %}
+                                    I agree to the <a href="#" class="text-primary">Terms & Conditions</a> and <a href="#" class="text-primary">Privacy Policy</a>
+                                {% endif %}
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                {% if current_language == 'sw' %}Tuma Oda{% else %}Submit Order{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        {% if current_language == 'sw' %}Muhtasari wa Oda{% else %}Order Summary{% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td class="p-1">
+                                        <strong>{{ item.product.name }}</strong>
+                                        <br>
+                                        <small class="text-muted">x {{ item.quantity }}</small>
+                                    </td>
+                                    <td class="p-1 text-end">TZS {{ item.item_total|floatformat:0 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{% if current_language == 'sw' %}Jumla{% else %}Subtotal{% endif %}</span>
+                        <span>TZS {{ cart_total|floatformat:0 }}</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{% if current_language == 'sw' %}Usafirishaji{% else %}Shipping{% endif %}</span>
+                        <span>
+                            {% if current_language == 'sw' %}
+                                Itahesabiwa
+                            {% else %}
+                                To be calculated
+                            {% endif %}
+                        </span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="mb-0">{% if current_language == 'sw' %}Jumla ya Oda{% else %}Order Total{% endif %}</h5>
+                        <h5 class="mb-0 text-primary">TZS {{ cart_total|floatformat:0 }}</h5>
+                    </div>
+                    
+                    <div class="alert alert-info small">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {% if current_language == 'sw' %}
+                            Malipo yatafanyika wakati wa kukabidhiwa. Tutauma maelezo ya oda kupitia SMS na WhatsApp.
+                        {% else %}
+                            Payment will be made upon delivery. We'll send order details via SMS and WhatsApp.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .sticky-top {
+        position: -webkit-sticky;
+        position: sticky;
+        z-index: 1020;
+    }
+</style>
+{% endblock %}

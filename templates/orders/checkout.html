@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% if current_language == 'sw' %}Malipo{% else %}Checkout{% endif %}</h2>
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-md-8">
+            <!-- FORM ACTION MUST BE CORRECT -->
+            <form method="POST" action="{% url 'place_order' %}">
+                {% csrf_token %}  <!-- THIS IS CRITICAL -->
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>{% if current_language == 'sw' %}Taarifa za Mteja{% else %}Customer Information{% endif %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {% if current_language == 'sw' %}Jina Kamili *{% else %}Full Name *{% endif %}
+                            </label>
+                            <input type="text" class="form-control" name="customer_name" required 
+                                   value="{{ request.POST.customer_name|default:'' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {% if current_language == 'sw' %}Barua Pepe{% else %}Email Address{% endif %}
+                            </label>
+                            <input type="email" class="form-control" name="customer_email"
+                                   value="{{ request.POST.customer_email|default:'' }}">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {% if current_language == 'sw' %}Nambari ya Simu *{% else %}Phone Number *{% endif %}
+                            </label>
+                            <input type="tel" class="form-control" name="customer_phone" required
+                                   value="{{ request.POST.customer_phone|default:'' }}">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>{% if current_language == 'sw' %}Anwani ya Uwasilishaji{% else %}Shipping Address{% endif %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                {% if current_language == 'sw' %}Anwani Kamili *{% else %}Full Address *{% endif %}
+                            </label>
+                            <textarea class="form-control" name="customer_address" rows="3" required>{{ request.POST.customer_address|default:'' }}</textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        {% if current_language == 'sw' %}Mji{% else %}City{% endif %}
+                                    </label>
+                                    <input type="text" class="form-control" name="customer_city"
+                                           value="{{ request.POST.customer_city|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        {% if current_language == 'sw' %}Mkoa{% else %}Region{% endif %}
+                                    </label>
+                                    <input type="text" class="form-control" name="customer_region"
+                                           value="{{ request.POST.customer_region|default:'' }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>{% if current_language == 'sw' %}Njia ya Malipo{% else %}Payment Method{% endif %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod" checked>
+                            <label class="form-check-label" for="cod">
+                                {% if current_language == 'sw' %}Malipo ya Fedha Wakati wa Kufika (COD){% else %}Cash on Delivery (COD){% endif %}
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="mobile" value="mobile">
+                            <label class="form-check-label" for="mobile">
+                                {% if current_language == 'sw' %}Pesa Mkoba{% else %}Mobile Money{% endif %}
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" id="bank" value="bank">
+                            <label class="form-check-label" for="bank">
+                                {% if current_language == 'sw' %}Uhamisho wa Benki{% else %}Bank Transfer{% endif %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>{% if current_language == 'sw' %}Maelezo ya Ziada{% else %}Additional Notes{% endif %}</h5>
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control" name="notes" rows="2">{{ request.POST.notes|default:'' }}</textarea>
+                    </div>
+                </div>
+                
+                <!-- HIDDEN FIELD TO STORE CART DATA -->
+                <input type="hidden" name="cart_data" value="{{ cart_json|default:'{}' }}">
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg" id="placeOrderBtn">
+                        <i class="fas fa-check-circle"></i>
+                        {% if current_language == 'sw' %}Weka Agizo{% else %}Place Order{% endif %}
+                    </button>
+                    <a href="{% url 'cart_detail' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        {% if current_language == 'sw' %}Rudi kwenye Carti{% else %}Back to Cart{% endif %}
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>{% if current_language == 'sw' %}Muhtasari wa Carti{% else %}Cart Summary{% endif %}</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for item in cart_items %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>{{ item.product.name }} x {{ item.quantity }}</span>
+                            <span>TZS {{ item.item_total|floatformat:0 }}</span>
+                        </li>
+                        {% endfor %}
+                        
+                        <li class="list-group-item d-flex justify-content-between">
+                            <strong>{% if current_language == 'sw' %}Jumla{% else %}Total{% endif %}</strong>
+                            <strong>TZS {{ cart_total|floatformat:0 }}</strong>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6>{% if current_language == 'sw' %}Mawasiliano{% else %}Contact{% endif %}</h6>
+                    <p class="mb-1"><i class="fas fa-phone"></i> +255 621202752</p>
+                    <p class="mb-1"><i class="fas fa-envelope"></i> issaambari09@gmail.com</p>
+                    <p class="mb-0"><i class="fas fa-clock"></i> Mon-Fri, 9AM-5PM EAT</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for debugging -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    
+    form.addEventListener('submit', function(e) {
+        console.log('Form submitted');
+        console.log('Customer name:', document.querySelector('[name="customer_name"]').value);
+        console.log('Customer phone:', document.querySelector('[name="customer_phone"]').value);
+        console.log('Customer address:', document.querySelector('[name="customer_address"]').value);
+        
+        // Show loading
+        const btn = document.getElementById('placeOrderBtn');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        btn.disabled = true;
+    });
+});
+</script>
+{% endblock %}

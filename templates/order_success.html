@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed - Ambertek Export{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-success">
+                <div class="card-header bg-success text-white text-center">
+                    <i class="fas fa-check-circle fa-3x mb-3"></i>
+                    <h2 class="mb-0">Order Confirmed!</h2>
+                </div>
+                <div class="card-body text-center py-5">
+                    <h3 class="text-success mb-3">Thank You for Your Order!</h3>
+                    <p class="lead mb-4">Your order has been received and is being processed.</p>
+                    
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>Order Details</h5>
+                                    <table class="table table-borderless">
+                                        <tr>
+                                            <td><strong>Order Number:</strong></td>
+                                            <td>#{{ order.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Customer Name:</strong></td>
+                                            <td>{{ order.full_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Total Amount:</strong></td>
+                                            <td class="h5 text-primary">${{ order.total_amount }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Status:</strong></td>
+                                            <td><span class="badge bg-warning">{{ order.get_status_display }}</span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle me-2"></i>What Happens Next?</h6>
+                        <ul class="list-unstyled mb-0">
+                            <li><i class="fas fa-phone text-success me-2"></i>We will contact you within 24 hours to confirm your order</li>
+                            <li><i class="fas fa-shipping-fast text-success me-2"></i>Your items will be shipped from Dubai</li>
+                            <li><i class="fas fa-truck text-success me-2"></i>Delivery time: 7-14 days to Tanzania</li>
+                            <li><i class="fas fa-tracking text-success me-2"></i>You'll receive a tracking number</li>
+                        </ul>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'track_order' %}" class="btn btn-outline-primary btn-lg w-100">
+                                <i class="fas fa-search me-2"></i>Track Your Order
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="{% url 'products' %}" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h6>Need Immediate Assistance?</h6>
+                        <div class="d-flex justify-content-center gap-3 mt-3">
+                            <a href="https://wa.me/971561498516" class="btn btn-success" target="_blank">
+                                <i class="fab fa-whatsapp me-2"></i>WhatsApp Us
+                            </a>
+                            <a href="tel:+971561498516" class="btn btn-outline-primary">
+                                <i class="fas fa-phone me-2"></i>Call Us
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

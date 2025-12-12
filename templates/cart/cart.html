@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <h2 class="mb-4">
+        {% if current_language == 'sw' %}
+            Gari la Ununuzi
+        {% else %}
+            Shopping Cart
+        {% endif %}
+    </h2>
+    
+    {% if cart_items %}
+        <!-- Cart items table -->
+        <div class="table-responsive">
+            <table class="table">
+                <!-- Cart items display -->
+            </table>
+        </div>
+        
+        <!-- Checkout button - Show based on authentication -->
+        <div class="text-end mt-4">
+            {% if user.is_authenticated %}
+                <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg">
+                    {% if current_language == 'sw' %}
+                        <i class="fas fa-shopping-cart"></i> Endelea Kwenye Malipo
+                    {% else %}
+                        <i class="fas fa-shopping-cart"></i> Proceed to Checkout
+                    {% endif %}
+                </a>
+            {% else %}
+                <div class="alert alert-warning">
+                    <h5>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {% if current_language == 'sw' %}
+                            Umepaswa Kuingia!
+                        {% else %}
+                            You Must Login!
+                        {% endif %}
+                    </h5>
+                    <p>
+                        {% if current_language == 'sw' %}
+                            Unahitaji kuingia au kujisajili ili kuweka agizo.
+                        {% else %}
+                            You need to login or register to place an order.
+                        {% endif %}
+                    </p>
+                    <div class="mt-3">
+                        <a href="{% url 'login' %}?next={% url 'checkout' %}" class="btn btn-primary me-2">
+                            <i class="fas fa-sign-in-alt"></i>
+                            {% if current_language == 'sw' %}
+                                Ingia
+                            {% else %}
+                                Login
+                            {% endif %}
+                        </a>
+                        <a href="{% url 'register' %}?next={% url 'checkout' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-user-plus"></i>
+                            {% if current_language == 'sw' %}
+                                Jisajili
+                            {% else %}
+                                Register
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <!-- Empty cart message -->
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            {% if current_language == 'sw' %}
+                Gari lako la ununuzi ni tupu. <a href="{% url 'products' %}">Endelea kununua</a>
+            {% else %}
+                Your shopping cart is empty. <a href="{% url 'products' %}">Continue shopping</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

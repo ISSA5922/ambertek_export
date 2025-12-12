@@ -1,0 +1,1 @@
+web: gunicorn ambertek_export.wsgi:application
